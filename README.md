@@ -8,6 +8,10 @@
  - Can be used with DeepL Free and Pro API
  - Supports input field and textarea right now
  - Keeps all formattings of a textarea field. Even HTML-Tags
+ 
+
+https://user-images.githubusercontent.com/2411246/200800227-e2336667-8564-47f3-9084-aa6640da5471.mp4
+
 
 ## Installation
 
