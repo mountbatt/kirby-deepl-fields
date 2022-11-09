@@ -1,0 +1,16 @@
+.deepl-button {
+  border: 1px solid #111;
+  color: #111;
+  padding: 3px 8px;
+  background: #f3f3f3;
+  border-radius: 3px;
+  margin-right: 10px;
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 10px;
+  transition: 0.1s all;
+}
+.deepl-button:hover {
+  background: #111;
+  color: #f3f3f3;
+}

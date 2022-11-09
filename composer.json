@@ -1,0 +1,24 @@
+{
+    "name": "mountbatt/kirby-deepl-fields",
+    "description": "Kirby 3 DeepL Fields",
+    "type": "kirby-plugin",
+    "license": "MIT",
+    "version": "0.1",
+    "authors": [
+        {
+            "name": "Tobias Battenberg",
+            "email": "mountbatt@gmail.com"
+        }
+    ],
+    "require": {
+        "getkirby/composer-installer": "^1.1"
+    },
+    "extra": {
+        "installer-name": "kirby-deepl-fields"
+    },
+    "keywords": [
+        "kirby3",
+        "deepl",
+        "translation"
+    ]
+}
