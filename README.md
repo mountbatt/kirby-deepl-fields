@@ -19,7 +19,7 @@ This plugin requires PHP 8.0 and Kirby 3.6.0 or higher.
 
 Download and copy this repository to ```/site/plugins/kirby-deepl-fields```
 
-Alternatively, you can install it with composer: ```composer mountbatt/kirby-deepl-fields```
+Alternatively, you can install it with composer: ```composer require mountbatt/kirby-deepl-fields```
 
 
 ## Setup
