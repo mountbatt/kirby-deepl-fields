@@ -21,6 +21,28 @@ Kirby::plugin('mountbatt/deepl', [
             ]
         ]
     ],
+    'api' => [
+        'routes' => [
+            [
+                'pattern' => 'deepl',
+                'method' => 'POST',
+                'action'  => function () {
+                    $options = array(
+                        'http' => array(
+                        'method' => 'POST',
+                        'header' => 
+                            "Authorization: DeepL-Auth-Key " . option('mountbatt.deepl.config.api_key') ."\r\n". 
+                            'Content-Type: application/x-www-form-urlencoded'."\r\n",
+                        'content' => http_build_query(json_decode(file_get_contents("php://input"), true))
+                    ));
+                    $context = stream_context_create($options);
+                    $response = file_get_contents(option('mountbatt.deepl.config.api_url'), false, $context);
+
+                    return $response;                
+                }
+            ]
+        ]
+    ],
     'translations' => [
         'en' => [
             'mountbatt.deepl.import' => 'Import from',
