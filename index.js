@@ -140,7 +140,7 @@
               body: JSON.stringify({
                 'preserve_formatting':'1',
                 'split_sentences':'1',
-                'text': this.value,
+                'text': encodeURIComponent(this.value),
                 'target_lang': current_language,
                 'source_lang': base_language
               })
