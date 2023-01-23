@@ -140,13 +140,12 @@
               body: JSON.stringify({
                 'preserve_formatting':'1',
                 'split_sentences':'1',
-                'text': encodeURIComponent(this.value),
+                'text': this.value,
                 'target_lang': current_language,
                 'source_lang': base_language
               })
           });
           const data = await response.json();
-          console.log(data);
           this.error = null;
           this.value = data.translations[0].text;
           this.$emit("input", data.translations[0].text);

@@ -3,12 +3,6 @@ Kirby::plugin('mountbatt/deepl', [
     'fields' => [
         'deepl' => [
             'props' => [
-                'api_key' => function () {
-                    return option('mountbatt.deepl.config.api_key');
-                },
-                'api_url' => function () {
-                    return option('mountbatt.deepl.config.api_url');
-                },
                 'csrf' => function () {
                     return kirby()->csrf();
                 },
