@@ -80,6 +80,3 @@ return [
 
 MIT
 
-## 💚 Say thanks
-
-💸 https://www.paypal.com/paypalme/mountbatt
