@@ -1,17 +1,17 @@
 <template>
 	<k-field
-		class="k-deepl-field"
-		:required="required"
-		:disabled="disabled"
-		:label="label"
+			class="k-deepl-field"
+			:required="required"
+			:disabled="disabled"
+			:label="label"
 	>
 		<k-input
-			class="k-deepl-input"
-			:size="size"
-			theme="field"
-			:type="inputtype"
-			:value="value"
-			@input="setValue($event, 'value')"
+				class="k-deepl-input"
+				:size="size"
+				theme="field"
+				:type="inputtype"
+				:value="value"
+				@input="setValue($event, 'value')"
 		/>
 		<k-button icon="import" :tooltip="$t('mountbatt.deepl.importhelp')" v-show="button.current_language != button.base_language" class="k-field-help deepl-button" @click="importOriginalValue">{{ $t('mountbatt.deepl.import') }} »{{ button.base_language.toUpperCase() }}«</k-button>
 		<k-button icon="refresh" :tooltip="$t('mountbatt.deepl.translatenow')" v-show="button.current_language != button.base_language" class="k-field-help deepl-button" @click="doTranslation">{{ button.text.toUpperCase() }}</k-button>
@@ -23,15 +23,15 @@ export default {
 	props: {
 		field_name: {
 			type: String,
-			required: true,		
+			required: true,
 		},
 		page_id: {
 			type: String,
-			required: true,		
+			required: true,
 		},
 		csrf: {
 			type: String,
-			required: true,		
+			required: true,
 		},
 		api_key: {
 			type: String,
@@ -42,6 +42,7 @@ export default {
 			required: true,
 		},
 		label: String,
+		endpoints: Object,
 		required: Boolean,
 		disabled: Boolean,
 		inputtype: String,
@@ -57,7 +58,7 @@ export default {
 			},
 		},
 	},
-	
+
 	data() {
 		const panel = document.querySelector(".k-panel");
 		const current_language = panel.dataset.language;
@@ -72,35 +73,29 @@ export default {
 		};
 	},
 
-	
-	computed: {
-		
-	},
-	
+	computed: {},
+
 	methods: {
-		
-		importOriginalValue() {
-			const csrf = this.csrf;
-			fetch("../api/pages/" + this.page_id, {
-				method: "GET",
-				headers: {
-					"X-CSRF" : csrf
-				}
-			})
-			.then(response => response.json())
-			.then(response => {
-				const page = response.data;
-				// do something with the page data
-				this.$emit("input", page.content[this.field_name])
-			})
-			.catch(error => {
-				// something went wrong
+
+		async importOriginalValue() {
+
+			const parentBlock = this.getParentComponent('k-block');
+
+			const response = await this.$api.get(this.endpoints.model, {
+				language: this.button.base_language,
 			});
-			
-		
-			
+
+			if (parentBlock) {
+				const fieldName = parentBlock.endpoints.field.split('/').at(-1);
+				const blockContent = response.content[fieldName].find(block => block.id === parentBlock.id);
+				const fieldContent = blockContent.content[this.field_name];
+				this.$emit("input", fieldContent)
+			} else {
+
+				this.$emit("input", response.content[this.field_name])
+			}
 		},
-		
+
 		async doTranslation(evt, value) {
 			//console.log(this.value)
 			const panel = document.querySelector(".k-panel");
@@ -111,10 +106,10 @@ export default {
 				alert("Error … No event")
 				return;
 			}
-			
+
 			try {
 				const response = await fetch(
-					this.api_url+'?auth_key='+this.api_key+'&preserve_formatting=1split_sentences=1&text='+encodeURIComponent(this.value)+'&target_lang='+current_language+'&source_lang='+base_language
+						this.api_url + '?auth_key=' + this.api_key + '&preserve_formatting=1split_sentences=1&text=' + encodeURIComponent(this.value) + '&target_lang=' + current_language + '&source_lang=' + base_language
 				);
 				const data = await response.json();
 				console.log(data);
@@ -122,7 +117,7 @@ export default {
 				this.value = data.translations[0].text
 				this.$emit("input", data.translations[0].text);
 				if (data.translations[0].text) {
-					
+
 				} else {
 					this.error = data.message;
 					console.log(data.message)
@@ -130,13 +125,21 @@ export default {
 			} catch (err) {
 				//
 			}
-			
-			
-			
-			
-			
+
 		},
-		
+
+		getParentComponent(componentName, start = this) {
+			let component = null
+			let parent = start.$parent
+			while (parent && !component) {
+				if (parent.$options.name === componentName) {
+					component = parent
+				}
+				parent = parent.$parent
+			}
+			return component
+		},
+
 		setValue(value) {
 			this.error = null;
 			this.$emit("input", value);
@@ -148,5 +151,5 @@ export default {
 </script>
 
 <style lang="scss">
-	@import '../assets/css/styles.scss'
+@import '../assets/css/styles.scss'
 </style>
