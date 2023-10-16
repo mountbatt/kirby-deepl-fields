@@ -13,7 +13,7 @@ Kirby::plugin('mountbatt/deepl', [
                     return kirby()->csrf();
                 },
                 'page_id' => function () {
-                    return page()->id();
+                    return str_replace('/', '+', $this->model()->id());
                 },
                 'field_name' => function () {
                     return $this->name();
