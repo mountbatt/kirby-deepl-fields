@@ -131,10 +131,21 @@
         }
         try {
           const response = await fetch(
-            this.api_url + "?auth_key=" + this.api_key + "&preserve_formatting=1split_sentences=1&text=" + encodeURIComponent(this.value) + "&target_lang=" + current_language + "&source_lang=" + base_language
-          );
+            '../api/deepl', {
+              method: 'POST', 
+              headers: {
+                "X-CSRF": this.csrf,
+                "Content-Type" : "application/json"
+              },
+              body: JSON.stringify({
+                'preserve_formatting':'1',
+                'split_sentences':'1',
+                'text': this.value,
+                'target_lang': current_language,
+                'source_lang': base_language
+              })
+          });
           const data = await response.json();
-          console.log(data);
           this.error = null;
           this.value = data.translations[0].text;
           this.$emit("input", data.translations[0].text);

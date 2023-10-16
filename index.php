@@ -3,12 +3,6 @@ Kirby::plugin('mountbatt/deepl', [
     'fields' => [
         'deepl' => [
             'props' => [
-                'api_key' => function () {
-                    return option('mountbatt.deepl.config.api_key');
-                },
-                'api_url' => function () {
-                    return option('mountbatt.deepl.config.api_url');
-                },
                 'csrf' => function () {
                     return kirby()->csrf();
                 },
@@ -17,6 +11,28 @@ Kirby::plugin('mountbatt/deepl', [
                 },
                 'field_name' => function () {
                     return $this->name();
+                }
+            ]
+        ]
+    ],
+    'api' => [
+        'routes' => [
+            [
+                'pattern' => 'deepl',
+                'method' => 'POST',
+                'action'  => function () {                   
+                    $url = option('mountbatt.deepl.config.api_url');
+                    $data = json_decode(file_get_contents("php://input"), true);
+                    $options = [
+                        'headers' => [
+                            'Authorization: DeepL-Auth-Key ' . option('mountbatt.deepl.config.api_key'),
+                            'Content-Type: application/x-www-form-urlencoded'
+                        ],
+                        'method'  => 'POST',
+                        'data'    => http_build_query($data)
+                    ];
+                    $response = Remote::request($url, $options);
+                    return $response->content();
                 }
             ]
         ]
